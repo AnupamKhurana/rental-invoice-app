@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Add Property - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>➕ Add New Property</h1>
+    <a href="{{ url_for('property.list_properties') }}" class="btn btn-secondary">← Back to Properties</a>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('property.add_property') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="property_name">Property Name <span class="required">*</span></label>
+                    <input type="text" id="property_name" name="property_name" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="property_type">Property Type <span class="required">*</span></label>
+                    <select id="property_type" name="property_type" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="industrial">Industrial</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="flat_number">Flat/Unit Number</label>
+                    <input type="text" id="flat_number" name="flat_number" class="form-control">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="building_name">Building Name</label>
+                    <input type="text" id="building_name" name="building_name" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Address Details</h3>
+        
+        <div class="form-group">
+            <label for="address_line1">Address Line 1 <span class="required">*</span></label>
+            <input type="text" id="address_line1" name="address_line1" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address_line2">Address Line 2</label>
+            <input type="text" id="address_line2" name="address_line2" class="form-control">
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="city">City <span class="required">*</span></label>
+                    <input type="text" id="city" name="city" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="state">State <span class="required">*</span></label>
+                    <select id="state" name="state" class="form-control" required>
+                        {% for value, label in states %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="pincode">Pincode <span class="required">*</span></label>
+            <input type="text" id="pincode" name="pincode" class="form-control" maxlength="6" required>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Property Details</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="total_area_sqft">Total Area (sq ft)</label>
+                    <input type="number" id="total_area_sqft" name="total_area_sqft" class="form-control" step="0.01">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="carpet_area_sqft">Carpet Area (sq ft)</label>
+                    <input type="number" id="carpet_area_sqft" name="carpet_area_sqft" class="form-control" step="0.01">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="number_of_rooms">Number of Rooms</label>
+                    <input type="number" id="number_of_rooms" name="number_of_rooms" class="form-control">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="number_of_bathrooms">Number of Bathrooms</label>
+                    <input type="number" id="number_of_bathrooms" name="number_of_bathrooms" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="parking_available"> Parking Available
+                    </label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="furnished"> Furnished
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-success">Save Property</button>
+            <a href="{{ url_for('property.list_properties') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

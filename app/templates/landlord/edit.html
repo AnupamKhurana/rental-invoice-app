@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Landlord - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>✏️ Edit Landlord: {{ landlord.name }}</h1>
+    <a href="{{ url_for('landlord.list_landlords') }}" class="btn btn-secondary">← Back to Landlords</a>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('landlord.edit_landlord', id=landlord.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="form-group">
+            <label for="name">Full Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ landlord.name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ landlord.email }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" class="form-control" value="{{ landlord.phone }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Address <span class="required">*</span></label>
+            <textarea id="address" name="address" class="form-control" required>{{ landlord.address }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="pan">PAN Number <span class="required">*</span></label>
+            <input type="text" id="pan" name="pan" class="form-control" 
+                   value="{{ landlord.pan }}" 
+                   maxlength="10"
+                   style="text-transform: uppercase;"
+                   required>
+        </div>
+        
+        <div class="form-group">
+            <label for="gstin">GSTIN (Optional)</label>
+            <input type="text" id="gstin" name="gstin" class="form-control" 
+                   value="{{ landlord.gstin or '' }}"
+                   maxlength="15"
+                   style="text-transform: uppercase;">
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">Update Landlord</button>
+            <a href="{{ url_for('landlord.list_landlords') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+# Flask Framework
+flask==3.0.0
+flask-sqlalchemy==3.1.1
+flask-wtf==1.2.1
+flask-login==0.6.3
+flask-migrate==4.0.5
+werkzeug==3.0.1
+
+# PDF Generation
+reportlab==4.0.7
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Validation
+email-validator==2.1.0
+
+# Security
+bcrypt==4.1.2
+
+# Additional utilities
+python-dateutil==2.8.2

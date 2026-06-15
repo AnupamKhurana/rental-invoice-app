@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Summary - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">📊 Summary Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value" style="color: #28a745;">{{ properties_count }}</div>
+        <div class="stat-label">Properties</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" style="color: #17a2b8;">{{ tenants_count }}</div>
+        <div class="stat-label">Tenants</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" style="color: #ffc107;">{{ active_leases }}</div>
+        <div class="stat-label">Active Leases</div>
+    </div>
+</div>
+
+<h2 style="margin-bottom: 1rem; color: #1a1a2e;">💰 Financial Summary</h2>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value" style="color: #1a1a2e; font-size: 1.8rem;">₹ {{ "{:,.0f}".format(total_invoices) }}</div>
+        <div class="stat-label">Total Invoiced</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" style="color: #28a745; font-size: 1.8rem;">₹ {{ "{:,.0f}".format(paid_invoices) }}</div>
+        <div class="stat-label">Paid Amount</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" style="color: #dc3545; font-size: 1.8rem;">₹ {{ "{:,.0f}".format(pending_invoices) }}</div>
+        <div class="stat-label">Pending/Overdue</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">🚀 Quick Actions</div>
+    <div class="card-body" style="padding: 1rem;">
+        <a href="{{ url_for('tenant.add_tenant') }}" class="btn btn-primary" style="margin-right: 0.5rem;">Add Tenant</a>
+        <a href="{{ url_for('property.add_property') }}" class="btn btn-primary" style="margin-right: 0.5rem;">Add Property</a>
+        <a href="{{ url_for('lease.add_lease') }}" class="btn btn-primary" style="margin-right: 0.5rem;">Create Lease</a>
+        <a href="{{ url_for('invoice.list_invoices') }}" class="btn btn-success">View Invoices</a>
+    </div>
+</div>
+{% endblock %}

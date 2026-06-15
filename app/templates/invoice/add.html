@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Create Invoice - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📄 Create New Invoice</h1>
+    <a href="{{ url_for('lease.view_lease', id=lease.id) }}" class="btn btn-secondary">← Back to Lease</a>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Lease Information</div>
+            <div class="card-body">
+                <p><strong>Agreement #:</strong> {{ lease.agreement_number }}</p>
+                <p><strong>Tenant:</strong> {{ lease.tenant.name }}</p>
+                <p><strong>Property:</strong> {{ lease.property.property_name }}</p>
+                <p><strong>Monthly Rent:</strong> ₹ {{ "{:,.2f}".format(lease.monthly_rent) }}</p>
+                <p><strong>GST:</strong> {% if lease.gst_applicable %}{{ lease.gst_rate }}%{% else %}Not Applicable{% endif %}</p>
+                <p><strong>TDS:</strong> {% if lease.tds_applicable %}{{ lease.tds_rate }}%{% else %}Not Applicable{% endif %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('invoice.add_invoice', lease_id=lease.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Invoice Details</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="billing_month">Billing Month (YYYY-MM) <span class="required">*</span></label>
+                    <input type="month" id="billing_month" name="billing_month" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="invoice_date">Invoice Date <span class="required">*</span></label>
+                    <input type="date" id="invoice_date" name="invoice_date" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="due_date">Due Date <span class="required">*</span></label>
+            <input type="date" id="due_date" name="due_date" class="form-control" required>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Charges (₹)</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="basic_rent">Basic Rent</label>
+                    <input type="number" id="basic_rent" name="basic_rent" class="form-control" step="0.01" value="{{ lease.monthly_rent }}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="maintenance_charges">Maintenance Charges</label>
+                    <input type="number" id="maintenance_charges" name="maintenance_charges" class="form-control" step="0.01" value="{{ lease.maintenance_charges or 0 }}">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="parking_charges">Parking Charges</label>
+                    <input type="number" id="parking_charges" name="parking_charges" class="form-control" step="0.01" value="{{ lease.parking_charges or 0 }}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="electricity_charges">Electricity Charges</label>
+                    <input type="number" id="electricity_charges" name="electricity_charges" class="form-control" step="0.01" value="0">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="water_charges">Water Charges</label>
+                    <input type="number" id="water_charges" name="water_charges" class="form-control" step="0.01" value="0">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="other_charges">Other Charges</label>
+                    <input type="number" id="other_charges" name="other_charges" class="form-control" step="0.01" value="0">
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem; padding: 1rem; background: #f5f5f5; border-radius: 4px;">
+            <p style="margin: 0; font-size: 0.9rem; color: #666;">
+                <strong>ℹ️ Tax Calculation:</strong> GST and TDS will be calculated automatically based on lease settings.
+            </p>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-success">Create Invoice</button>
+            <a href="{{ url_for('lease.view_lease', id=lease.id) }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}View Property - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🏢 Property Details</h1>
+    <div>
+        <a href="{{ url_for('property.edit_property', id=property.id) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ url_for('property.list_properties') }}" class="btn btn-secondary">← Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Property Information</div>
+            <div class="card-body">
+                <p><strong>Property Name:</strong> {{ property.property_name }}</p>
+                <p><strong>Property Code:</strong> {{ property.property_code }}</p>
+                <p><strong>Type:</strong> {{ property.property_type|title }}</p>
+                <p><strong>Flat Number:</strong> {{ property.flat_number or 'N/A' }}</p>
+                <p><strong>Building Name:</strong> {{ property.building_name or 'N/A' }}</p>
+                <p><strong>Total Area:</strong> {{ property.total_area_sqft or 'N/A' }} sq ft</p>
+                <p><strong>Carpet Area:</strong> {{ property.carpet_area_sqft or 'N/A' }} sq ft</p>
+                <p><strong>Rooms:</strong> {{ property.number_of_rooms or 'N/A' }}</p>
+                <p><strong>Bathrooms:</strong> {{ property.number_of_bathrooms or 'N/A' }}</p>
+                <p><strong>Parking:</strong> {% if property.parking_available %}Yes{% else %}No{% endif %}</p>
+                <p><strong>Furnished:</strong> {% if property.furnished %}Yes{% else %}No{% endif %}</p>
+                <p><strong>Status:</strong> 
+                    {% if property.is_rented %}
+                        <span class="badge badge-warning">Rented</span>
+                    {% else %}
+                        <span class="badge badge-success">Available</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Address</div>
+            <div class="card-body">
+                <p><strong>Address Line 1:</strong> {{ property.address_line1 }}</p>
+                <p><strong>Address Line 2:</strong> {{ property.address_line2 or 'N/A' }}</p>
+                <p><strong>City:</strong> {{ property.city }}</p>
+                <p><strong>State:</strong> {{ property.state }}</p>
+                <p><strong>Pincode:</strong> {{ property.pincode }}</p>
+                <hr>
+                <p><strong>Full Address:</strong></p>
+                <p>{{ property.get_full_address() }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if leases %}
+<div class="card">
+    <div class="card-header">Active Leases</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Agreement #</th>
+                        <th>Tenant</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Monthly Rent</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lease in leases %}
+                    <tr>
+                        <td>{{ lease.agreement_number }}</td>
+                        <td>{{ lease.tenant.name }}</td>
+                        <td>{{ lease.start_date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ lease.end_date.strftime('%d-%m-%Y') }}</td>
+                        <td>₹ {{ "{:,.2f}".format(lease.monthly_rent) }}</td>
+                        <td>
+                            {% if lease.is_active %}
+                                <span class="badge badge-success">Active</span>
+                            {% else %}
+                                <span class="badge badge-warning">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('lease.view_lease', id=lease.id) }}" class="btn btn-sm btn-info">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

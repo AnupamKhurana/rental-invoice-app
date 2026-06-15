@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}View Lease Agreement - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📝 Lease Agreement Details</h1>
+    <div>
+        <a href="{{ url_for('lease.edit_lease', id=lease.id) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ url_for('invoice.add_invoice', lease_id=lease.id) }}" class="btn btn-success">+ Create Invoice</a>
+        <a href="{{ url_for('lease.list_leases') }}" class="btn btn-secondary">← Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Agreement Details</div>
+            <div class="card-body">
+                <p><strong>Agreement Number:</strong> {{ lease.agreement_number }}</p>
+                <p><strong>Status:</strong> 
+                    {% if lease.is_active %}
+                        <span class="badge badge-success">Active</span>
+                    {% elif lease.status == 'terminated' %}
+                        <span class="badge badge-danger">Terminated</span>
+                    {% else %}
+                        <span class="badge badge-warning">Expired</span>
+                    {% endif %}
+                </p>
+                <p><strong>Start Date:</strong> {{ lease.start_date.strftime('%d-%m-%Y') }}</p>
+                <p><strong>End Date:</strong> {{ lease.end_date.strftime('%d-%m-%Y') }}</p>
+                <p><strong>Notice Period:</strong> {{ lease.notice_period_days }} days</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Financial Terms</div>
+            <div class="card-body">
+                <p><strong>Monthly Rent:</strong> ₹ {{ "{:,.2f}".format(lease.monthly_rent) }}</p>
+                <p><strong>Security Deposit:</strong> ₹ {{ "{:,.2f}".format(lease.security_deposit) }}</p>
+                <p><strong>Maintenance Charges:</strong> ₹ {{ "{:,.2f}".format(lease.maintenance_charges) }}</p>
+                <p><strong>Parking Charges:</strong> ₹ {{ "{:,.2f}".format(lease.parking_charges) }}</p>
+                <hr>
+                <p><strong>Total Monthly:</strong> ₹ {{ "{:,.2f}".format(lease.total_monthly_amount()) }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Landlord Details</div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ lease.landlord.name }}</p>
+                <p><strong>Email:</strong> {{ lease.landlord.email }}</p>
+                <p><strong>Phone:</strong> {{ lease.landlord.phone }}</p>
+                <p><strong>PAN:</strong> {{ lease.landlord.pan }}</p>
+                <p><strong>GSTIN:</strong> {{ lease.landlord.gstin or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Tenant Details</div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ lease.tenant.name }}</p>
+                <p><strong>Email:</strong> {{ lease.tenant.email }}</p>
+                <p><strong>Phone:</strong> {{ lease.tenant.phone }}</p>
+                <p><strong>PAN:</strong> {{ lease.tenant.pan }}</p>
+                <p><strong>GSTIN:</strong> {{ lease.tenant.gstin or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Property Details</div>
+            <div class="card-body">
+                <p><strong>Property:</strong> {{ lease.property.property_name }}</p>
+                <p><strong>Type:</strong> {{ lease.property.property_type|title }}</p>
+                <p><strong>Address:</strong> {{ lease.property.get_full_address() }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Tax Compliance</div>
+            <div class="card-body">
+                <p><strong>GST Applicable:</strong> {% if lease.gst_applicable %}Yes ({{ lease.gst_rate }}%){% else %}No{% endif %}</p>
+                <p><strong>TDS Applicable:</strong> {% if lease.tds_applicable %}Yes ({{ lease.tds_rate }}%){% else %}No{% endif %}</p>
+                <p><strong>Monthly GST:</strong> ₹ {{ "{:,.2f}".format(lease.get_gst_amount()) }}</p>
+                <p><strong>Monthly TDS:</strong> ₹ {{ "{:,.2f}".format(lease.get_tds_amount()) }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if lease.is_active %}
+<div class="card">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>📄 Invoices</span>
+        <a href="{{ url_for('invoice.add_invoice', lease_id=lease.id) }}" class="btn btn-sm btn-success">+ Create Invoice</a>
+    </div>
+    <div class="card-body">
+        {% if invoices %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Period</th>
+                        <th>Date</th>
+                        <th>Due Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td>{{ invoice.invoice_number }}</td>
+                        <td>{{ invoice.billing_month }}/{{ invoice.billing_year }}</td>
+                        <td>{{ invoice.invoice_date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ invoice.due_date.strftime('%d-%m-%Y') }}</td>
+                        <td>₹ {{ "{:,.2f}".format(invoice.total_amount) }}</td>
+                        <td>
+                            {% if invoice.payment_status == 'paid' %}
+                                <span class="badge badge-success">Paid</span>
+                            {% elif invoice.is_overdue() %}
+                                <span class="badge badge-danger">Overdue</span>
+                            {% else %}
+                                <span class="badge badge-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('invoice.view_invoice', invoice_id=invoice.id) }}" class="btn btn-sm btn-info">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center">No invoices created yet. <a href="{{ url_for('invoice.add_invoice', lease_id=lease.id) }}">Create first invoice</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% if lease.is_active %}
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('lease.terminate_lease', id=lease.id) }}" onsubmit="return confirm('Are you sure you want to terminate this lease?');">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-danger">Terminate Lease</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

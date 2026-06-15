@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem;">Welcome, {{ user.name }}!</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ user.id }}</div>
+        <div class="stat-label">User ID</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ user.pan }}</div>
+        <div class="stat-label">PAN Number</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ user.gstin or 'Not Registered' }}</div>
+        <div class="stat-label">GSTIN</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">📋 Quick Actions</div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem;">
+            <a href="{{ url_for('tenant.add_tenant') }}" class="btn btn-primary">➕ Add Tenant</a>
+            <a href="{{ url_for('property.add_property') }}" class="btn btn-primary">🏢 Add Property</a>
+            <a href="{{ url_for('lease.add_lease') }}" class="btn btn-primary">📝 Create Lease</a>
+            <a href="{{ url_for('invoice.list_invoices') }}" class="btn btn-success">📄 View Invoices</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">ℹ️ About This Application</div>
+    <div class="card-body" style="padding: 1rem;">
+        <p>This application is designed for Indian landlords to manage their rental properties with full compliance to:</p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>Goods and Services Tax (GST) Act</li>
+            <li>Tax Deducted at Source (TDS) - Section 194-IB</li>
+            <li>Income Tax Act, 1961</li>
+            <li>Real Estate (Regulation and Development) Act (RERA)</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

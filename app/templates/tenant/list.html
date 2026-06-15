@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Tenants - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>👥 Tenants</h1>
+    <a href="{{ url_for('tenant.add_tenant') }}" class="btn btn-primary">➕ Add New Tenant</a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>PAN</th>
+                    <th>GSTIN</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tenant in tenants %}
+                <tr>
+                    <td>{{ tenant.id }}</td>
+                    <td>{{ tenant.name }}</td>
+                    <td>{{ tenant.email }}</td>
+                    <td>{{ tenant.phone }}</td>
+                    <td>{{ tenant.pan }}</td>
+                    <td>{{ tenant.gstin or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('tenant.view_tenant', id=tenant.id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ url_for('tenant.edit_tenant', id=tenant.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">No tenants found. <a href="{{ url_for('tenant.add_tenant') }}">Add one now</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

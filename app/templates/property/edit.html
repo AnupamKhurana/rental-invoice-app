@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Property - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>✏️ Edit Property: {{ property.property_name }}</h1>
+    <a href="{{ url_for('property.list_properties') }}" class="btn btn-secondary">← Back to Properties</a>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('property.edit_property', id=property.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="property_name">Property Name <span class="required">*</span></label>
+                    <input type="text" id="property_name" name="property_name" class="form-control" value="{{ property.property_name }}" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="property_type">Property Type <span class="required">*</span></label>
+                    <select id="property_type" name="property_type" class="form-control" required>
+                        <option value="residential" {% if property.property_type == 'residential' %}selected{% endif %}>Residential</option>
+                        <option value="commercial" {% if property.property_type == 'commercial' %}selected{% endif %}>Commercial</option>
+                        <option value="industrial" {% if property.property_type == 'industrial' %}selected{% endif %}>Industrial</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="flat_number">Flat/Unit Number</label>
+                    <input type="text" id="flat_number" name="flat_number" class="form-control" value="{{ property.flat_number or '' }}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="building_name">Building Name</label>
+                    <input type="text" id="building_name" name="building_name" class="form-control" value="{{ property.building_name or '' }}">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="address_line1">Address Line 1 <span class="required">*</span></label>
+            <input type="text" id="address_line1" name="address_line1" class="form-control" value="{{ property.address_line1 }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address_line2">Address Line 2</label>
+            <input type="text" id="address_line2" name="address_line2" class="form-control" value="{{ property.address_line2 or '' }}">
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="city">City <span class="required">*</span></label>
+                    <input type="text" id="city" name="city" class="form-control" value="{{ property.city }}" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="state">State <span class="required">*</span></label>
+                    <select id="state" name="state" class="form-control" required>
+                        {% for value, label in states %}
+                        <option value="{{ value }}" {% if property.state == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="pincode">Pincode <span class="required">*</span></label>
+            <input type="text" id="pincode" name="pincode" class="form-control" value="{{ property.pincode }}" maxlength="6" required>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="total_area_sqft">Total Area (sq ft)</label>
+                    <input type="number" id="total_area_sqft" name="total_area_sqft" class="form-control" value="{{ property.total_area_sqft or '' }}" step="0.01">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="carpet_area_sqft">Carpet Area (sq ft)</label>
+                    <input type="number" id="carpet_area_sqft" name="carpet_area_sqft" class="form-control" value="{{ property.carpet_area_sqft or '' }}" step="0.01">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="number_of_rooms">Number of Rooms</label>
+                    <input type="number" id="number_of_rooms" name="number_of_rooms" class="form-control" value="{{ property.number_of_rooms or '' }}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="number_of_bathrooms">Number of Bathrooms</label>
+                    <input type="number" id="number_of_bathrooms" name="number_of_bathrooms" class="form-control" value="{{ property.number_of_bathrooms or '' }}">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="parking_available" {% if property.parking_available %}checked{% endif %}> Parking Available
+                    </label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="furnished" {% if property.furnished %}checked{% endif %}> Furnished
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">Update Property</button>
+            <a href="{{ url_for('property.list_properties') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

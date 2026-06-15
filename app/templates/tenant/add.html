@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Add Tenant - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>➕ Add New Tenant</h1>
+    <a href="{{ url_for('tenant.list_tenants') }}" class="btn btn-secondary">← Back to Tenants</a>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('tenant.add_tenant') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit mobile" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="pan">PAN Number <span class="required">*</span></label>
+                    <input type="text" id="pan" name="pan" class="form-control" 
+                           placeholder="ABCDE1234F" 
+                           maxlength="10"
+                           style="text-transform: uppercase;"
+                           required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Address <span class="required">*</span></label>
+            <textarea id="address" name="address" class="form-control" required></textarea>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="gstin">GSTIN (Optional)</label>
+                    <input type="text" id="gstin" name="gstin" class="form-control" 
+                           placeholder="22ABCDE1234F1Z5"
+                           maxlength="15"
+                           style="text-transform: uppercase;">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="aadhaar">Aadhaar Number (Optional)</label>
+                    <input type="text" id="aadhaar" name="aadhaar" class="form-control" 
+                           placeholder="12-digit Aadhaar"
+                           maxlength="12">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="emergency_contact_name">Emergency Contact Name</label>
+                    <input type="text" id="emergency_contact_name" name="emergency_contact_name" class="form-control">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="emergency_contact_phone">Emergency Contact Phone</label>
+                    <input type="tel" id="emergency_contact_phone" name="emergency_contact_phone" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="employer_name">Employer Name</label>
+                    <input type="text" id="employer_name" name="employer_name" class="form-control">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="employer_address">Employer Address</label>
+                    <input type="text" id="employer_address" name="employer_address" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-success">Save Tenant</button>
+            <a href="{{ url_for('tenant.list_tenants') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

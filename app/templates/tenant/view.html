@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}View Tenant - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>👤 Tenant Details</h1>
+    <div>
+        <a href="{{ url_for('tenant.edit_tenant', id=tenant.id) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ url_for('tenant.list_tenants') }}" class="btn btn-secondary">← Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ tenant.name }}</p>
+                <p><strong>Email:</strong> {{ tenant.email }}</p>
+                <p><strong>Phone:</strong> {{ tenant.phone }}</p>
+                <p><strong>Address:</strong> {{ tenant.address }}</p>
+                <p><strong>PAN:</strong> {{ tenant.pan }}</p>
+                <p><strong>GSTIN:</strong> {{ tenant.gstin or 'Not Applicable' }}</p>
+                <p><strong>Aadhaar:</strong> {{ tenant.aadhaar or 'Not Provided' }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Additional Information</div>
+            <div class="card-body">
+                <p><strong>Emergency Contact:</strong> {{ tenant.emergency_contact_name or 'N/A' }}</p>
+                <p><strong>Emergency Phone:</strong> {{ tenant.emergency_contact_phone or 'N/A' }}</p>
+                <p><strong>Employer:</strong> {{ tenant.employer_name or 'N/A' }}</p>
+                <p><strong>Employer Address:</strong> {{ tenant.employer_address or 'N/A' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if leases %}
+<div class="card">
+    <div class="card-header">Lease Agreements</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Agreement #</th>
+                        <th>Property</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Monthly Rent</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lease in leases %}
+                    <tr>
+                        <td>{{ lease.agreement_number }}</td>
+                        <td>{{ lease.property.property_name }}</td>
+                        <td>{{ lease.start_date.strftime('%d-%m-%Y') }}</td>
+                        <td>{{ lease.end_date.strftime('%d-%m-%Y') }}</td>
+                        <td>₹ {{ "{:,.2f}".format(lease.monthly_rent) }}</td>
+                        <td>
+                            {% if lease.is_active %}
+                                <span class="badge badge-success">Active</span>
+                            {% else %}
+                                <span class="badge badge-warning">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('lease.view_lease', id=lease.id) }}" class="btn btn-sm btn-info">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

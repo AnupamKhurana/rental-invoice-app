@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Invoices - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📄 Invoices</h1>
+    <a href="{{ url_for('main.summary') }}" class="btn btn-primary">← Dashboard</a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Invoice #</th>
+                    <th>Tenant</th>
+                    <th>Property</th>
+                    <th>Period</th>
+                    <th>Invoice Date</th>
+                    <th>Due Date</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td>{{ invoice.lease.tenant.name }}</td>
+                    <td>{{ invoice.lease.property.property_name }}</td>
+                    <td>{{ invoice.billing_month }}/{{ invoice.billing_year }}</td>
+                    <td>{{ invoice.invoice_date.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ invoice.due_date.strftime('%d-%m-%Y') }}</td>
+                    <td>₹ {{ "{:,.2f}".format(invoice.total_amount) }}</td>
+                    <td>
+                        {% if invoice.payment_status == 'paid' %}
+                            <span class="badge badge-success">Paid</span>
+                        {% elif invoice.is_overdue() %}
+                            <span class="badge badge-danger">Overdue</span>
+                        {% else %}
+                            <span class="badge badge-warning">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('invoice.view_invoice', invoice_id=invoice.id) }}" class="btn btn-sm btn-info">View</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="text-center">No invoices found. <a href="{{ url_for('main.summary') }}">Go to dashboard</a> to create a lease and invoice.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

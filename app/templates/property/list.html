@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Properties - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🏢 Properties</h1>
+    <a href="{{ url_for('property.add_property') }}" class="btn btn-primary">➕ Add New Property</a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Property Name</th>
+                    <th>Type</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prop in properties %}
+                <tr>
+                    <td>{{ prop.id }}</td>
+                    <td>{{ prop.property_name }}</td>
+                    <td>{{ prop.property_type|title }}</td>
+                    <td>{{ prop.address_line1 }}</td>
+                    <td>{{ prop.city }}</td>
+                    <td>
+                        {% if prop.is_rented %}
+                            <span class="badge badge-warning">Rented</span>
+                        {% else %}
+                            <span class="badge badge-success">Available</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('property.view_property', id=prop.id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ url_for('property.edit_property', id=prop.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">No properties found. <a href="{{ url_for('property.add_property') }}">Add one now</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

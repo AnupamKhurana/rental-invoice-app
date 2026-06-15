@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Lease Agreement - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>✏️ Edit Lease Agreement: {{ lease.agreement_number }}</h1>
+    <a href="{{ url_for('lease.list_leases') }}" class="btn btn-secondary">← Back to Leases</a>
+</div>
+
+<div class="card">
+    <form method="POST" action="{{ url_for('lease.edit_lease', id=lease.id) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        
+        <h3 style="margin: 1rem 0; color: #1a1a2e;">Parties</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="tenant_id">Tenant <span class="required">*</span></label>
+                    <select id="tenant_id" name="tenant_id" class="form-control" required>
+                        {% for tenant in tenants %}
+                        <option value="{{ tenant.id }}" {% if tenant.id == lease.tenant_id %}selected{% endif %}>{{ tenant.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="property_id">Property <span class="required">*</span></label>
+                    <select id="property_id" name="property_id" class="form-control" required>
+                        {% for prop in properties %}
+                        <option value="{{ prop.id }}" {% if prop.id == lease.property_id %}selected{% endif %}>{{ prop.property_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Lease Terms</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="start_date">Start Date <span class="required">*</span></label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ lease.start_date.strftime('%Y-%m-%d') }}" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="end_date">End Date <span class="required">*</span></label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ lease.end_date.strftime('%Y-%m-%d') }}" required>
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Financial Terms</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="monthly_rent">Monthly Rent (₹) <span class="required">*</span></label>
+                    <input type="number" id="monthly_rent" name="monthly_rent" class="form-control" step="0.01" value="{{ lease.monthly_rent }}" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="security_deposit">Security Deposit (₹)</label>
+                    <input type="number" id="security_deposit" name="security_deposit" class="form-control" step="0.01" value="{{ lease.security_deposit or 0 }}">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="maintenance_charges">Maintenance Charges (₹)</label>
+                    <input type="number" id="maintenance_charges" name="maintenance_charges" class="form-control" step="0.01" value="{{ lease.maintenance_charges or 0 }}">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="parking_charges">Parking Charges (₹)</label>
+                    <input type="number" id="parking_charges" name="parking_charges" class="form-control" step="0.01" value="{{ lease.parking_charges or 0 }}">
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="margin: 1.5rem 0 1rem; color: #1a1a2e;">Tax Compliance</h3>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="gst_applicable" {% if lease.gst_applicable %}checked{% endif %}> GST Applicable?
+                    </label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="gst_rate">GST Rate (%)</label>
+                    <input type="number" id="gst_rate" name="gst_rate" class="form-control" step="0.01" value="{{ lease.gst_rate or 18.0 }}">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="tds_applicable" {% if lease.tds_applicable %}checked{% endif %}> TDS Applicable?
+                    </label>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="tds_rate">TDS Rate (%)</label>
+                    <input type="number" id="tds_rate" name="tds_rate" class="form-control" step="0.01" value="{{ lease.tds_rate or 5.0 }}">
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">Update Lease Agreement</button>
+            <a href="{{ url_for('lease.list_leases') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

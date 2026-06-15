@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Indian Rental Invoicing App{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 0;">
+    <h1 style="font-size: 2.5rem; color: #1a1a2e; margin-bottom: 1rem;">
+        🏠 Indian Rental Invoicing Application
+    </h1>
+    <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 2rem;">
+        A comprehensive rental management solution compliant with Indian GST laws, 
+        TDS regulations, and accounting standards.
+    </p>
+    
+    {% if not current_user.is_authenticated %}
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary" style="margin-right: 1rem;">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-success">Register</a>
+    </div>
+    
+    <div style="margin-top: 3rem; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: #1a1a2e; margin-bottom: 1rem;">✨ Features</h3>
+        <div class="card">
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ Tenant Management - Store tenant details securely</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ Property Management - Track all rental properties</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ Lease Agreements - Create and manage leases</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ GST Compliance - Automatic GST calculations</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ TDS Deduction - Section 194-IB compliance</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ Professional Invoices - PDF generation with Indian format</li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">✅ PAN/GSTIN Validation - Built-in validators</li>
+                <li style="padding: 0.5rem 0;">✅ Audit Trail - Track all changes</li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('main.summary') }}" class="btn btn-primary">Go to Dashboard</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

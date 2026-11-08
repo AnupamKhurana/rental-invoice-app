@@ -1,5 +1,8 @@
 # 🏠 Indian Rental Invoicing Application
 
+> **App Root Folder:** `/mnt/1fc0b605-b95c-4190-ba0a-ae87f22cc120/development/rental-invoice-app`
+
+
 A comprehensive rental management application designed for Indian landlords, compliant with GST laws, TDS regulations, and Indian accounting standards.
 
 ## ✨ Features
